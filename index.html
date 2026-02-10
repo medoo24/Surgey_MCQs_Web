@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surgery Interactive Library</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg: #f0f2f5;
+            --sidebar-bg: #0f172a;
+            --accent: #10b981;
+            --accent-hover: #059669;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --glass: rgba(255, 255, 255, 0.9);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', 'Segoe UI', sans-serif; background: var(--bg); height: 100vh; overflow: hidden; display: flex; }
+
+        /* Sidebar Styling */
+        .sidebar {
+            width: 320px;
+            background: var(--sidebar-bg);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+            z-index: 10;
+        }
+
+        .sidebar-header {
+            padding: 30px 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar-header i { font-size: 2.5rem; color: var(--accent); margin-bottom: 10px; }
+        .sidebar-header h1 { font-size: 1.2rem; letter-spacing: 1px; text-transform: uppercase; }
+
+        .nav-section {
+            padding: 20px;
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+
+        .section-label {
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: block;
+            letter-spacing: 1px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 15px;
+            border-radius: 12px;
+            color: #cbd5e1;
+            text-decoration: none;
+            margin-bottom: 8px;
+            transition: 0.3s;
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+
+        .nav-item i { margin-right: 12px; width: 20px; text-align: center; }
+        .nav-item:hover { background: rgba(255,255,255,0.05); color: var(--accent); }
+        .nav-item.active { background: var(--accent); color: white; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); }
+
+        /* Main Content Area */
+        .main-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .top-bar {
+            height: 70px;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .view-controls { display: flex; gap: 15px; }
+        .btn-icon { background: #f1f5f9; border: none; width: 40px; height: 40px; border-radius: 10px; cursor: pointer; color: var(--text-muted); transition: 0.2s; }
+        .btn-icon:hover { background: var(--accent); color: white; }
+
+        .iframe-container {
+            flex-grow: 1;
+            background: #e2e8f0;
+            position: relative;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: white;
+        }
+
+        /* Welcome Screen inside Iframe Area */
+        #welcome-screen {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            z-index: 5;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .welcome-card {
+            max-width: 500px;
+            padding: 40px;
+            border-radius: 30px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+        }
+
+        .welcome-card i { font-size: 4rem; color: var(--accent); margin-bottom: 20px; }
+        .welcome-card h2 { margin-bottom: 10px; color: var(--text-main); }
+        .welcome-card p { color: var(--text-muted); margin-bottom: 25px; }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .sidebar { width: 80px; }
+            .sidebar h1, .section-label, .nav-item span { display: none; }
+            .nav-item { justify-content: center; padding: 15px 0; }
+            .nav-item i { margin: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <i class="fas fa-microscope"></i>
+            <h1>Surgery Hub</h1>
+        </div>
+
+        <nav class="nav-section">
+            <span class="section-label">Book of College</span>
+            
+            <div class="nav-item" onclick="loadQuiz('General Surgery Review Part One 1.html', this)">
+                <i class="fas fa-file-medical"></i>
+                <span>Part One (1)</span>
+            </div>
+
+            <div class="nav-item" onclick="loadQuiz('General Surgery Review Part Two 2.html', this)">
+                <i class="fas fa-file-medical"></i>
+                <span>Part Two (2)</span>
+            </div>
+
+            <div class="nav-item" onclick="loadQuiz('General Surgery Review Part Three 3.html', this)">
+                <i class="fas fa-file-medical"></i>
+                <span>Part Three (3)</span>
+            </div>
+
+            <div style="margin-top: 30px;"></div>
+            
+            <span class="section-label">Mansoura Book</span>
+            
+            <div class="nav-item" onclick="loadQuiz('General Surgery Review Part Mansoura.html', this)">
+                <i class="fas fa-hospital-user"></i>
+                <span>Mansoura Review</span>
+            </div>
+        </nav>
+
+        <div style="padding: 20px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.8rem; opacity: 0.5; text-align: center;">
+            Study Dashboard v2.0
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="top-bar">
+            <h2 id="current-title" style="font-size: 1.1rem; color: var(--text-main);">Dashboard Home</h2>
+            <div class="view-controls">
+                <button class="btn-icon" title="Reload" onclick="reloadIframe()"><i class="fas fa-sync-alt"></i></button>
+                <button class="btn-icon" title="Full Screen" onclick="toggleFullScreen()"><i class="fas fa-expand"></i></button>
+            </div>
+        </div>
+
+        <div class="iframe-container">
+            <div id="welcome-screen">
+                <div class="welcome-card">
+                    <i class="fas fa-user-md"></i>
+                    <h2>Welcome, Doctor</h2>
+                    <p>Select a medical part from the left sidebar to begin your comprehensive surgery review session.</p>
+                </div>
+            </div>
+            <iframe id="quiz-frame" src=""></iframe>
+        </div>
+    </main>
+
+    <script>
+        function loadQuiz(url, element) {
+            // Hide welcome screen
+            document.getElementById('welcome-screen').style.display = 'none';
+            
+            // Set Iframe Source
+            const frame = document.getElementById('quiz-frame');
+            frame.src = url;
+
+            // Update UI
+            document.getElementById('current-title').innerText = element.innerText;
+            
+            // Handle active class
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            element.classList.add('active');
+        }
+
+        function reloadIframe() {
+            const frame = document.getElementById('quiz-frame');
+            if(frame.src) frame.contentWindow.location.reload();
+        }
+
+        function toggleFullScreen() {
+            const frame = document.getElementById('quiz-frame');
+            if (!document.fullscreenElement) {
+                frame.requestFullscreen().catch(err => {
+                    alert(`Error attempting to enable full-screen mode: ${err.message}`);
+                });
+            } else {
+                document.exitFullscreen();
+            }
+        }
+    </script>
+</body>
+</html>
